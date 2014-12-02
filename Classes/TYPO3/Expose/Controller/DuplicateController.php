@@ -18,7 +18,7 @@ use TYPO3\Flow\Annotations as Flow;
  * Action to create a new Being
  *
  */
-class NewController extends AbstractController {
+class DuplicateController extends AbstractController {
 
 	/**
 	 * @return void
@@ -50,7 +50,8 @@ class NewController extends AbstractController {
 	public function createAction($type) {
 		$objects = $this->request->getInternalArgument('__objects');
 		foreach ($objects as $object) {
-			$this->persistenceManager->add($object);
+			$newObject = clone($object);
+			$this->persistenceManager->add($newObject);
 		}
 		$this->persistenceManager->persistAll();
 		$this->redirect('index', 'sametypelist', 'TYPO3.Expose', array('type' => $type));

@@ -26,6 +26,10 @@
 				<source>Delete</source>
 				<target>Löschen</target>
 			</trans-unit>
+			<trans-unit id="duplicate">
+				<source>Duplicate</source>
+				<target>Duplizieren</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -8,6 +8,8 @@ prototype(TYPO3.Expose:RecordList) < prototype(TYPO3.TypoScript:Template) {
 		10.action = 'index'
 		10.controller = 'TYPO3\\Expose\\Controller\\NewController'
 		10.arguments.type = ${type}
+		
+		
 	}
 		// For now, we configure the format selector to be only active when listing
 		// Domain Models

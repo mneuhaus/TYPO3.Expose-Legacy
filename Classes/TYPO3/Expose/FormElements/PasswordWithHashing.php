@@ -25,21 +25,38 @@ class PasswordWithHashing extends \TYPO3\Form\FormElements\PasswordWithConfirmat
 	protected $hashService;
 
 	/**
+	 * @var string
+	 */
+	protected $defaultValue;
+
+	/**
 	 * @param \TYPO3\Form\Core\Runtime\FormRuntime $formRuntime
 	 * @param mixed $elementValue
 	 * @return void
 	 */
 	public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
-		if ($elementValue['password'] !== $elementValue['confirmation']) {
-			$processingRule = $this->getRootForm()->getProcessingRule($this->getIdentifier());
-			$processingRule->getProcessingMessages()->addError(new \TYPO3\Flow\Error\Error('Password doesn\'t match confirmation', 1334768052));
-		}
-		if (empty($elementValue['password'])) {
-				// TODO: Somehow this is empty!!!
-			$elementValue = $this->getDefaultValue();
+		parent::onSubmit($formRuntime, $elementValue);
+		if (strlen($elementValue) > 0) {
+			$elementValue = $this->hashService->hashPassword($elementValue, 'default');
 		} else {
-			$elementValue = $this->hashService->hashPassword($elementValue['password'], 'default');
+			$elementValue = $this->defaultValue;
 		}
+	}
+
+	public function getConfirmationUniqueIdentifier() {
+		return $this->getUniqueIdentifier() . '-confirmation';
+	}
+
+	/**
+	 * Set the default value of the element
+	 *
+	 * @param mixed $defaultValue
+	 * @return void
+	 */
+	public function setDefaultValue($defaultValue) {
+		$this->defaultValue = $defaultValue;
+		$formDefinition = $this->getRootForm();
+		$formDefinition->addElementDefaultValue($this->identifier, $defaultValue);
 	}
 }
 
